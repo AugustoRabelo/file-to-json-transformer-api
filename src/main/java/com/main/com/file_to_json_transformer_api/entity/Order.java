@@ -1,4 +1,4 @@
-package entity;
+package com.main.com.file_to_json_transformer_api.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name="orders")
 public class Order {
 
     @Id
