@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -12,10 +14,10 @@ public class Product {
 
     @Id
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @Column(name = "product_value")
-    private double value;
+    private BigDecimal value;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

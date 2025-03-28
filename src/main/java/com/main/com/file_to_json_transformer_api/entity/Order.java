@@ -15,7 +15,7 @@ public class Order {
 
     @Id
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @Column(name = "date")
     private LocalDate date;
