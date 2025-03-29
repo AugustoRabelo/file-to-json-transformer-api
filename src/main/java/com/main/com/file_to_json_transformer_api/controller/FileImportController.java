@@ -21,11 +21,7 @@ public class FileImportController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            fileImportService.importFile(file);
-            return ResponseEntity.ok("File processed successfully");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing file");
-        }
+        fileImportService.importFile(file);
+        return ResponseEntity.ok("File processed successfully");
     }
 }
