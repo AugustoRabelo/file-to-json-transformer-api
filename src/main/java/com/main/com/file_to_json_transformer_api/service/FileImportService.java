@@ -7,6 +7,8 @@ import com.main.com.file_to_json_transformer_api.repository.OrderRepository;
 import com.main.com.file_to_json_transformer_api.repository.ProductRepository;
 import com.main.com.file_to_json_transformer_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,8 @@ public class FileImportService {
     private OrderRepository orderRepository;
 
     private static final int BATCH_SIZE = 1000;
+
+    private static final Logger logger = LoggerFactory.getLogger(FileImportService.class);
 
     @Transactional
     public void importFile(MultipartFile file) {
@@ -201,8 +205,7 @@ public class FileImportService {
     }
 
     private void logError(String message, Exception e) {
-        System.err.println(message);
-        e.printStackTrace();
+        logger.error(message, e);
     }
 
     public static class FileImportException extends RuntimeException {
