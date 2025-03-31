@@ -8,6 +8,7 @@ import com.main.com.file_to_json_transformer_api.entity.Product;
 import com.main.com.file_to_json_transformer_api.entity.User;
 import com.main.com.file_to_json_transformer_api.repository.OrderRepository;
 import com.main.com.file_to_json_transformer_api.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class DataExportService {
 
     @Autowired
@@ -26,8 +28,13 @@ public class DataExportService {
     private UserRepository userRepository;
 
     public UserDTO getOrderById(String orderId) {
+        log.info("Starting to fetch order by ID: {}", orderId);
+
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    log.error("Order not found for ID: {}", orderId);
+                    return new RuntimeException("Order not found");
+                });
 
         User user = order.getUser();
 
@@ -53,12 +60,18 @@ public class DataExportService {
 
         userDTO.setOrder(orderDTO);
 
+        log.info("Successfully fetched order data for order ID: {}", orderId);
+
         return userDTO;
     }
 
     public List<UserDTO> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
+        log.info("Fetching orders between {} and {}", startDate, endDate);
+
         Sort sort = Sort.by(Sort.Order.asc("date"));
         List<Order> orders = orderRepository.findByDateBetween(startDate, endDate, sort);
+
+        log.info("Found {} orders in the specified date range", orders.size());
 
         List<UserDTO> userDTOs = new ArrayList<>();
         for (Order order : orders) {
@@ -85,6 +98,8 @@ public class DataExportService {
             userDTO.setOrder(orderDTO);
             userDTOs.add(userDTO);
         }
+
+        log.info("Successfully fetched {} users", userDTOs.size());
 
         return userDTOs;
     }
